@@ -2,3 +2,4 @@ venv
 .idea
 staticfiles
 .git
+db.sqlite3
