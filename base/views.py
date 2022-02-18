@@ -43,7 +43,7 @@ def sitemap_view(request):
             continue
 
         # Apply filters
-        if request_filter and not joined_url.startswith(request_filter):
+        if request_filter and request_filter not in joined_url:
             continue
 
         urls.append(joined_url.rstrip("/"))
