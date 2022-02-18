@@ -7,9 +7,7 @@ class Thread(models.Model):
     thread_id = models.PositiveBigIntegerField(
         help_text="The id of this thread.", primary_key=True
     )
-    time_opened = models.DateTimeField(
-        help_text="When the thread was opened.", editable=False
-    )
+    time_opened = models.DateTimeField(help_text="When the thread was opened.")
     time_closed = models.DateTimeField(
         help_text="When the thread was closed.", blank=True, null=True
     )
