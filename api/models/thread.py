@@ -24,5 +24,8 @@ class Thread(models.Model):
         help_text="The topic for this thread.", default="", blank=True
     )
 
+    def __str__(self):
+        return f"Thread(thread_id={self.thread_id})"
+
     class Meta:
         ordering = ("time_opened",)

@@ -17,6 +17,9 @@ class ThreadMessage(models.Model):
         default=False, help_text="Was the author a helper when they sent this message?"
     )
 
+    def __str__(self):
+        return f"ThreadMessage(thread={self.thread})"
+
     class Meta:
         ordering = ("time_sent",)
         verbose_name = "Thread Message"
