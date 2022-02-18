@@ -11,7 +11,7 @@ RUN mkdir -p /app
 COPY requirements.txt /app/requirements.txt
 RUN pip install --no-warn-script-location -r /app/requirements.txt
 
-COPY dockerfiles/django /app/
+COPY . /app/
 ARG SECRET_KEY="Docker_builds"
 ARG API_KEY_HEADER="Docker_builds"
 
