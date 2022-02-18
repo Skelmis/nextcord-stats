@@ -1,3 +1,4 @@
 gunicorn==20.1.0
 Django==3.2.12
 django-ninja==0.17.0
+orjson==3.6.7
