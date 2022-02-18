@@ -116,7 +116,9 @@ def patch_thread(request: HttpRequest, thread_id: int, patch_data: ThreadPatchSc
     description="Adds the given message to the associated thread.",
     response={201: List[ThreadMessageSchema], handled_4xx_codes: Message},
 )
-def create_thread_message(request: HttpRequest, message: ThreadMessageSchema):
+def create_thread_message(
+    request: HttpRequest, thread_id: int, message: ThreadMessageSchema
+):
     raise BadRequest
 
 

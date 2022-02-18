@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sitemap</title>
+
+    <!-- Discord metadata -->
+    <meta property="og:title" content="Nextcord Statistics">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://nextcord.koldfusion.xyz">
+    <meta property="og:title" content="Statistics about Nextcord help threads.">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<h1 class="h2">Sitemap</h1>
+<hr>
+
+<table>
+    <thead>
+    <tr>
+        {% for foo in headers %}
+            <th scope="col">{{ foo }}</th>
+        {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for url in urls %}
+        <tr>
+            <td>{{ url }}</td>
+            <td><a href="../{{ url }}">Jump</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<br><hr>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" class="btn btn-transparent btn-outline-dark">Apply Filter</button>
+    <button onclick="location.href = '.';" class="btn btn-transparent btn-outline-dark">
+        Clear filter
+    </button>
+</form>
+
+<br>
+</body>
+</html>
