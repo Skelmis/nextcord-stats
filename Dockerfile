@@ -13,6 +13,7 @@ RUN pip install --no-warn-script-location -r /app/requirements.txt
 
 COPY dockerfiles/django /app/
 ARG SECRET_KEY="Docker_builds"
+ARG API_KEY_HEADER="Docker_builds"
 
 WORKDIR /app
 
