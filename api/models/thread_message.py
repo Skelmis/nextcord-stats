@@ -9,6 +9,9 @@ class ThreadMessage(models.Model):
     thread = models.ForeignKey(
         Thread, on_delete=models.CASCADE, help_text="The thread to attach this to."
     )
+    message_id = models.PositiveBigIntegerField(
+        help_text="The message id.", db_index=True
+    )
     author_id = models.PositiveBigIntegerField(
         help_text="The id for the author of this message.", db_index=True
     )
