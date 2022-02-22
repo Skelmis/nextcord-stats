@@ -3,6 +3,7 @@ from typing import List
 import orjson
 from django.core.exceptions import BadRequest, ValidationError
 from django.http import HttpRequest
+from django.shortcuts import get_object_or_404
 from ninja import NinjaAPI
 from ninja.parser import Parser
 from ninja.renderers import BaseRenderer
@@ -134,7 +135,7 @@ def retrieve_thread(request: HttpRequest, thread_id: int):
     response={200: ThreadOutSchema, 400: Message, 401: Message, 404: Message},
 )
 def patch_thread(request: HttpRequest, thread_id: int, patch_data: ThreadPatchSchema):
-    raise BadRequest
+    thread: Thread = get_object_or_404(Thread, thread_id=thread_id)
 
 
 @api.post(

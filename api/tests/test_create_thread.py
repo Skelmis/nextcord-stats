@@ -1,12 +1,9 @@
-import datetime
-
 import pytest
 from django.test import Client
 
 from api.tests import get_aware_time
 
 client: Client = Client()
-headers: dict = {"X-API-Key": "TESTING"}
 
 
 @pytest.mark.django_db
@@ -33,7 +30,6 @@ class TestCreateThread:
         r_1 = client.post(
             "/api/v1/thread",
             data=thread_data,
-            headers=headers,
             content_type="application/json",
         )
         assert r_1.status_code == 201
@@ -71,7 +67,6 @@ class TestCreateThread:
         r_1 = client.post(
             "/api/v1/thread",
             data=thread_data,
-            headers=headers,
             content_type="application/json",
         )
         assert r_1.status_code == 201
@@ -93,7 +88,6 @@ class TestCreateThread:
         r_1 = client.post(
             "/api/v1/thread",
             data=thread_data,
-            headers=headers,
             content_type="application/json",
         )
         assert r_1.status_code == 201
@@ -101,7 +95,6 @@ class TestCreateThread:
         r_2 = client.post(
             "/api/v1/thread",
             data=thread_data,
-            headers=headers,
             content_type="application/json",
         )
         assert r_2.status_code == 409
@@ -109,6 +102,5 @@ class TestCreateThread:
     def test_invalid(self):
         r_1 = client.post(
             "/api/v1/thread",
-            headers=headers,
         )
         assert r_1.status_code == 400

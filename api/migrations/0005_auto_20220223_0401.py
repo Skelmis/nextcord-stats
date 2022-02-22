@@ -6,18 +6,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0004_alter_threadmessage_message_id'),
+        ("api", "0004_alter_threadmessage_message_id"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='thread',
-            name='specific_topic',
-            field=models.TextField(blank=True, default='', help_text='Specifics for this thread, this is likely the exact issue (And thread name)'),
+            model_name="thread",
+            name="specific_topic",
+            field=models.TextField(
+                blank=True,
+                default="",
+                help_text="Specifics for this thread, this is likely the exact issue (And thread name)",
+            ),
         ),
         migrations.AlterField(
-            model_name='thread',
-            name='generic_topic',
-            field=models.TextField(blank=True, default='', help_text='The generic topic for this thread.'),
+            model_name="thread",
+            name="generic_topic",
+            field=models.TextField(
+                blank=True, default="", help_text="The generic topic for this thread."
+            ),
         ),
     ]

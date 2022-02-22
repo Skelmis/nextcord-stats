@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0001_initial'),
+        ("api", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='thread',
-            name='time_opened',
-            field=models.DateTimeField(help_text='When the thread was opened.'),
+            model_name="thread",
+            name="time_opened",
+            field=models.DateTimeField(help_text="When the thread was opened."),
         ),
     ]

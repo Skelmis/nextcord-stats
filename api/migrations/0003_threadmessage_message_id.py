@@ -6,14 +6,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0002_alter_thread_time_opened'),
+        ("api", "0002_alter_thread_time_opened"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='threadmessage',
-            name='message_id',
-            field=models.PositiveBigIntegerField(db_index=True, default=2, help_text='The message id.'),
+            model_name="threadmessage",
+            name="message_id",
+            field=models.PositiveBigIntegerField(
+                db_index=True, default=2, help_text="The message id."
+            ),
             preserve_default=False,
         ),
     ]
