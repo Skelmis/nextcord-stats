@@ -45,9 +45,9 @@ class BaseThreadSchema(Schema):
         ...,
         description="The id for the person who opened this thread.",
     )
-    topic: Optional[str] = Field(
+    generic_topic: Optional[str] = Field(
         "",
-        description="The generic_topic for this thread.",
+        description="The generic topic for this thread, likely set based off the button pressed.",
     )
 
 
@@ -66,9 +66,13 @@ class ThreadOutSchema(BaseThreadSchema):
 
 
 class ThreadPatchSchema(Schema):
-    topic: Optional[str] = Field(
+    generic_topic: Optional[str] = Field(
         "",
         description="The updated generic_topic for this thread.",
+    )
+    specific_topic: Optional[str] = Field(
+        "",
+        description="The updated specific topic for this thread. (This is likely thread name)",
     )
     time_closed: datetime.datetime = Field(
         None,
