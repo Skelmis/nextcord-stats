@@ -79,6 +79,9 @@ def handle_validation_error(request, exc):
     response={201: ThreadOutSchema, handled_4xx_codes: Message},
 )
 def create_new_thread(request: HttpRequest, new_thread: ThreadCreateSchema):
+    if Thread.objects.filter(thread_id=new_thread.thread_id).exists():
+        raise AlreadyExists
+
     thread: Thread = Thread.objects.create(
         thread_id=new_thread.thread_id,
         time_opened=new_thread.time_opened,

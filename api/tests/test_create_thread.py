@@ -3,6 +3,8 @@ import datetime
 import pytest
 from django.test import Client
 
+from api.tests import get_aware_time
+
 client: Client = Client()
 headers: dict = {"X-API-Key": "TESTING"}
 
@@ -16,14 +18,14 @@ class TestCreateThread:
     def test_create_full_thread(self):
         thread_data = returned_check = {
             "thread_id": 12345,
-            "time_opened": datetime.datetime.utcnow(),
+            "time_opened": get_aware_time(),
             "opened_by": 67890,
             "generic_topic": "A topic",
             "initial_message": {
                 "thread_id": 12345,
                 "message_id": 123,
                 "author_id": 67890,
-                "time_sent": datetime.datetime.utcnow(),
+                "time_sent": get_aware_time(),
                 "is_helper": False,
             },
         }
@@ -52,3 +54,54 @@ class TestCreateThread:
         returned_json["messages"][0].pop("time_sent")
 
         assert returned_json == thread_data
+
+    def test_min(self):
+        thread_data = {
+            "thread_id": 12345,
+            "time_opened": get_aware_time(),
+            "opened_by": 67890,
+            "initial_message": {
+                "thread_id": 12345,
+                "message_id": 123,
+                "author_id": 67890,
+                "time_sent": get_aware_time(),
+                "is_helper": False,
+            },
+        }
+        r_1 = client.post(
+            "/api/v1/thread",
+            data=thread_data,
+            headers=headers,
+            content_type="application/json",
+        )
+        assert r_1.status_code == 201
+
+    def test_duplicates(self):
+        thread_data = {
+            "thread_id": 12345,
+            "time_opened": get_aware_time(),
+            "opened_by": 67890,
+            "initial_message": {
+                "thread_id": 12345,
+                "message_id": 123,
+                "author_id": 67890,
+                "time_sent": get_aware_time(),
+                "is_helper": False,
+            },
+        }
+
+        r_1 = client.post(
+            "/api/v1/thread",
+            data=thread_data,
+            headers=headers,
+            content_type="application/json",
+        )
+        assert r_1.status_code == 201
+
+        r_2 = client.post(
+            "/api/v1/thread",
+            data=thread_data,
+            headers=headers,
+            content_type="application/json",
+        )
+        assert r_2.status_code == 409
