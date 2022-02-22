@@ -43,7 +43,7 @@ api = NinjaAPI(
     title="Nextcord Help Thread Statistics API",
 )
 
-handled_4xx_codes = frozenset({401, 409})
+handled_4xx_codes = frozenset({400, 401, 409})
 
 
 @api.exception_handler(AlreadyExists)

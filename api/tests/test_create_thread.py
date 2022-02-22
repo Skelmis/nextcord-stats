@@ -105,3 +105,10 @@ class TestCreateThread:
             content_type="application/json",
         )
         assert r_2.status_code == 409
+
+    def test_invalid(self):
+        r_1 = client.post(
+            "/api/v1/thread",
+            headers=headers,
+        )
+        assert r_1.status_code == 400
