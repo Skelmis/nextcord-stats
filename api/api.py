@@ -1,7 +1,7 @@
 from typing import List
 
 import orjson
-from django.core.exceptions import BadRequest
+from django.core.exceptions import BadRequest, ValidationError
 from django.http import HttpRequest
 from ninja import NinjaAPI
 from ninja.parser import Parser
@@ -14,6 +14,7 @@ from api.exceptions import (
     MissingPatchData,
     ResourceDoesntExist,
 )
+from api.models import Thread
 from api.schema import (
     ThreadCreateSchema,
     ThreadOutSchema,
@@ -65,6 +66,11 @@ def handle_missing_resource(request, exc):
     return api.create_response(request, {"message": str(exc)}, status=404)
 
 
+@api.exception_handler(ValidationError)
+def handle_validation_error(request, exc):
+    return api.create_response(request, {"message": str(exec)}, status=400)
+
+
 @api.post(
     "thread",
     tags=["Threads"],
@@ -73,7 +79,16 @@ def handle_missing_resource(request, exc):
     response={201: ThreadOutSchema, handled_4xx_codes: Message},
 )
 def create_new_thread(request: HttpRequest, new_thread: ThreadCreateSchema):
-    raise BadRequest
+    thread = Thread.objects.create(
+        thread_id=new_thread.thread_id,
+        time_opened=new_thread.time_opened,
+        opened_by=new_thread.opened_by,
+        generic_topic=new_thread.generic_topic if new_thread.generic_topic else "",
+    )
+    thread.full_clean()
+    thread.save()
+
+    return 201, thread.as_schema()
 
 
 @api.get(

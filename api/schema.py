@@ -63,6 +63,18 @@ class ThreadOutSchema(BaseThreadSchema):
         ...,
         description="All the messages associated with this thread.",
     )
+    time_closed: Optional[datetime.datetime] = Field(
+        None,
+        description="When this thread was closed.",
+    )
+    closed_by: int = Field(
+        None,
+        description="The id for the person who closed this thread.",
+    )
+    specific_topic: str = Field(
+        ...,
+        description="Specifics for this thread, this is likely the exact issue (And thread name)",
+    )
 
 
 class ThreadPatchSchema(Schema):

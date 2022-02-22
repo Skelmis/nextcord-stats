@@ -1,5 +1,7 @@
 from django.db import models
 
+from api.schema import ThreadOutSchema, ThreadMessageSchema
+
 
 class Thread(models.Model):
     """Represents a Nextcord help thread"""
@@ -31,6 +33,19 @@ class Thread(models.Model):
 
     def __str__(self):
         return f"Thread(thread_id={self.thread_id})"
+
+    def as_schema(self) -> ThreadOutSchema:
+        messages: list[ThreadMessageSchema] = []
+        return ThreadOutSchema(
+            messages=messages,
+            thread_id=self.thread_id,
+            time_opened=self.time_opened,
+            time_closed=self.time_closed,
+            opened_by=self.opened_by,
+            closed_by=self.closed_by,
+            generic_topic=self.generic_topic,
+            specific_topic=self.specific_topic,
+        )
 
     class Meta:
         ordering = ("time_opened",)
