@@ -15,7 +15,7 @@ class ThreadAdmin(admin.ModelAdmin):
         "thread_id",
         "time_opened",
         "opened_by",
-        "topic",
+        "generic_topic",
         "time_closed",
         "closed_by",
     )
@@ -23,7 +23,7 @@ class ThreadAdmin(admin.ModelAdmin):
         "thread_id",
         "time_opened",
         "opened_by",
-        "topic",
+        "generic_topic",
         "time_closed",
         "closed_by",
     )
@@ -31,11 +31,11 @@ class ThreadAdmin(admin.ModelAdmin):
         "thread_id",
         "time_opened",
         "opened_by",
-        "topic",
+        "generic_topic",
         "time_closed",
         "closed_by",
     )
-    list_filter = ("topic", "opened_by", "closed_by")
+    list_filter = ("generic_topic", "opened_by", "closed_by")
     actions = (delete_selected_no_conf,)
     date_hierarchy = "time_opened"
 

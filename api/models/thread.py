@@ -20,8 +20,13 @@ class Thread(models.Model):
     opened_by = models.PositiveBigIntegerField(
         help_text="The id of the person who opened this thread.", db_index=True
     )
-    topic = models.TextField(
-        help_text="The topic for this thread.", default="", blank=True
+    generic_topic = models.TextField(
+        help_text="The generic topic for this thread.", default="", blank=True
+    )
+    specific_topic = models.TextField(
+        help_text="Specifics for this thread, this is likely the exact issue (And thread name)",
+        default="",
+        blank=True,
     )
 
     def __str__(self):

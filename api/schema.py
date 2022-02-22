@@ -47,7 +47,7 @@ class BaseThreadSchema(Schema):
     )
     topic: Optional[str] = Field(
         "",
-        description="The topic for this thread.",
+        description="The generic_topic for this thread.",
     )
 
 
@@ -68,7 +68,7 @@ class ThreadOutSchema(BaseThreadSchema):
 class ThreadPatchSchema(Schema):
     topic: Optional[str] = Field(
         "",
-        description="The updated topic for this thread.",
+        description="The updated generic_topic for this thread.",
     )
     time_closed: datetime.datetime = Field(
         None,
