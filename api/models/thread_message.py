@@ -1,6 +1,7 @@
 from django.db import models
 
 from api.models import Thread
+from api.schema import ThreadMessageSchema
 
 
 class ThreadMessage(models.Model):
@@ -22,6 +23,15 @@ class ThreadMessage(models.Model):
 
     def __str__(self):
         return f"ThreadMessage(thread={self.thread})"
+
+    def as_schema(self) -> ThreadMessageSchema:
+        return ThreadMessageSchema(
+            thread_id=self.thread.thread_id,
+            message_id=self.message_id,
+            author_id=self.author_id,
+            time_sent=self.time_sent,
+            is_helper=self.is_helper,
+        )
 
     class Meta:
         ordering = ("time_sent",)

@@ -36,6 +36,9 @@ class Thread(models.Model):
 
     def as_schema(self) -> ThreadOutSchema:
         messages: list[ThreadMessageSchema] = []
+        for thread_message in self.threadmessage_set.all():
+            messages.append(thread_message.as_schema())
+
         return ThreadOutSchema(
             messages=messages,
             thread_id=self.thread_id,

@@ -14,7 +14,7 @@ from api.exceptions import (
     MissingPatchData,
     ResourceDoesntExist,
 )
-from api.models import Thread
+from api.models import Thread, ThreadMessage
 from api.schema import (
     ThreadCreateSchema,
     ThreadOutSchema,
@@ -79,7 +79,7 @@ def handle_validation_error(request, exc):
     response={201: ThreadOutSchema, handled_4xx_codes: Message},
 )
 def create_new_thread(request: HttpRequest, new_thread: ThreadCreateSchema):
-    thread = Thread.objects.create(
+    thread: Thread = Thread.objects.create(
         thread_id=new_thread.thread_id,
         time_opened=new_thread.time_opened,
         opened_by=new_thread.opened_by,
@@ -87,6 +87,16 @@ def create_new_thread(request: HttpRequest, new_thread: ThreadCreateSchema):
     )
     thread.full_clean()
     thread.save()
+
+    initial_message: ThreadMessage = ThreadMessage.objects.create(
+        thread=thread,
+        message_id=new_thread.initial_message.message_id,
+        author_id=new_thread.initial_message.author_id,
+        time_sent=new_thread.initial_message.time_sent,
+        is_helper=new_thread.initial_message.is_helper,
+    )
+    initial_message.full_clean()
+    initial_message.save()
 
     return 201, thread.as_schema()
 
