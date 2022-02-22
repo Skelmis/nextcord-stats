@@ -16,6 +16,7 @@ class ThreadAdmin(admin.ModelAdmin):
         "time_opened",
         "opened_by",
         "generic_topic",
+        "specific_topic",
         "time_closed",
         "closed_by",
     )
