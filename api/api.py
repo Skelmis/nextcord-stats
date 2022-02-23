@@ -124,7 +124,8 @@ def list_threads(request: HttpRequest):
     response={200: ThreadOutSchema, 401: Message, 404: Message},
 )
 def retrieve_thread(request: HttpRequest, thread_id: int):
-    raise BadRequest
+    thread: Thread = get_object_or_404(Thread, thread_id=thread_id)
+    return thread.as_schema()
 
 
 @api.patch(
@@ -135,7 +136,32 @@ def retrieve_thread(request: HttpRequest, thread_id: int):
     response={200: ThreadOutSchema, 400: Message, 401: Message, 404: Message},
 )
 def patch_thread(request: HttpRequest, thread_id: int, patch_data: ThreadPatchSchema):
+    if (
+        not patch_data.specific_topic
+        and not patch_data.generic_topic
+        and not patch_data.closed_by
+        and not patch_data.time_closed
+    ):
+        raise MissingPatchData
+
     thread: Thread = get_object_or_404(Thread, thread_id=thread_id)
+
+    # Do we need to stop modification of closed threads. Maybe not?
+    if patch_data.generic_topic:
+        thread.generic_topic = patch_data.generic_topic
+
+    if patch_data.specific_topic:
+        thread.specific_topic = patch_data.specific_topic
+
+    if patch_data.closed_by:
+        thread.closed_by = patch_data.closed_by
+
+    if patch_data.time_closed:
+        thread.time_closed = patch_data.time_closed
+
+    thread.full_clean()
+    thread.save()
+    return thread.as_schema()
 
 
 @api.post(
