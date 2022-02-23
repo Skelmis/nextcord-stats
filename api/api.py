@@ -69,7 +69,7 @@ def handle_missing_resource(request, exc):
 
 @api.exception_handler(ValidationError)
 def handle_validation_error(request, exc):
-    return api.create_response(request, {"message": str(exec)}, status=400)
+    return api.create_response(request, {"message": str(exc)}, status=400)
 
 
 @api.post(
@@ -161,7 +161,7 @@ def patch_thread(request: HttpRequest, thread_id: int, patch_data: ThreadPatchSc
 
     thread.full_clean()
     thread.save()
-    return thread.as_schema()
+    return 200, thread.as_schema()
 
 
 @api.post(
@@ -169,12 +169,29 @@ def patch_thread(request: HttpRequest, thread_id: int, patch_data: ThreadPatchSc
     tags=["Threads"],
     summary="Add a message to a Thread.",
     description="Adds the given message to the associated thread.",
-    response={201: List[ThreadMessageSchema], handled_4xx_codes: Message},
+    response={201: ThreadMessageSchema, handled_4xx_codes: Message},
 )
 def create_thread_message(
     request: HttpRequest, thread_id: int, message: ThreadMessageSchema
 ):
-    raise BadRequest
+    if thread_id != message.thread_id:
+        raise ValidationError(
+            "Thread route param did not match provided data thread id."
+        )
+
+    thread: Thread = get_object_or_404(Thread, thread_id=thread_id)
+
+    tm: ThreadMessage = ThreadMessage.objects.create(
+        thread=thread,
+        is_helper=message.is_helper,
+        time_sent=message.time_sent,
+        author_id=message.author_id,
+        message_id=message.message_id,
+    )
+    tm.full_clean()
+    tm.save()
+
+    return 201, tm.as_schema()
 
 
 @api.get(
