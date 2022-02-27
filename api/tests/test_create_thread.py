@@ -1,6 +1,7 @@
 import pytest
 from django.test import Client
 
+from api.models import InitThread
 from api.tests import get_aware_time
 
 client: Client = Client()
@@ -104,3 +105,27 @@ class TestCreateThread:
             "/api/v1/thread",
         )
         assert r_1.status_code == 400
+
+    def test_init_thread(self):
+        InitThread.objects.create(thread_id=12345, help_type="Heya").save()
+
+        thread_data = {
+            "thread_id": 12345,
+            "time_opened": get_aware_time(),
+            "opened_by": 67890,
+            "initial_message": {
+                "thread_id": 12345,
+                "message_id": 123,
+                "author_id": 67890,
+                "time_sent": get_aware_time(),
+                "is_helper": False,
+            },
+        }
+
+        r_1 = client.post(
+            "/api/v1/thread",
+            data=thread_data,
+            content_type="application/json",
+        )
+        assert r_1.status_code == 201
+        assert r_1.json()["generic_topic"] == "Heya"

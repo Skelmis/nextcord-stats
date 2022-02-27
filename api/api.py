@@ -131,7 +131,7 @@ def list_threads(request: HttpRequest):
     description="Init a thread, with the interaction button help.",
     response={201: None, handled_4xx_codes: Message},
 )
-async def init_thread(request: HttpRequest, init_data: InitThreadSchema):
+def create_init_thread(request: HttpRequest, init_data: InitThreadSchema):
     it: InitThread = InitThread.objects.create(
         thread_id=init_data.thread_id, help_type=init_data.help_type
     )
@@ -147,7 +147,7 @@ async def init_thread(request: HttpRequest, init_data: InitThreadSchema):
     description="Delete the init for a thread.",
     response={200: None, handled_4xx_codes: Message},
 )
-async def delete_init_thread(request: HttpRequest, thread_id: int):
+def delete_init_thread(request: HttpRequest, thread_id: int):
     try:
         InitThread.objects.get(thread_id=thread_id).delete()
     except InitThread.DoesNotExist:
