@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.db.models import QuerySet
 
-from api.models import Thread, ThreadMessage
+from api.models import Thread, ThreadMessage, InitThread
 
 
 @admin.action(description="Delete selected (No Confirmation)")
@@ -55,3 +55,11 @@ class ThreadMessageAdmin(admin.ModelAdmin):
     )
     actions = (delete_selected_no_conf,)
     date_hierarchy = "time_sent"
+
+
+@admin.register(InitThread)
+class InitThreadAdmin(admin.ModelAdmin):
+    list_display = ("thread_id", "help_type", "created_at")
+    search_fields = ("thread_id", "help_type")
+    actions = (delete_selected_no_conf,)
+    date_hierarchy = "created_at"

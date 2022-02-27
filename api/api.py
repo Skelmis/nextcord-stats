@@ -15,13 +15,14 @@ from api.exceptions import (
     MissingPatchData,
     ResourceDoesntExist,
 )
-from api.models import Thread, ThreadMessage
+from api.models import Thread, ThreadMessage, InitThread
 from api.schema import (
     ThreadCreateSchema,
     ThreadOutSchema,
     ThreadMessageSchema,
     ThreadPatchSchema,
     Message,
+    InitThreadSchema,
 )
 
 
@@ -83,11 +84,18 @@ def create_new_thread(request: HttpRequest, new_thread: ThreadCreateSchema):
     if Thread.objects.filter(thread_id=new_thread.thread_id).exists():
         raise AlreadyExists
 
+    try:
+        it: InitThread = InitThread.objects.get(thread_id=new_thread.thread_id)
+        help_type: str = it.help_type
+        it.delete()
+    except InitThread.DoesNotExist:
+        help_type = new_thread.generic_topic if new_thread.generic_topic else ""
+
     thread: Thread = Thread.objects.create(
         thread_id=new_thread.thread_id,
         time_opened=new_thread.time_opened,
         opened_by=new_thread.opened_by,
-        generic_topic=new_thread.generic_topic if new_thread.generic_topic else "",
+        generic_topic=help_type,
     )
     thread.full_clean()
     thread.save()
@@ -114,6 +122,38 @@ def create_new_thread(request: HttpRequest, new_thread: ThreadCreateSchema):
 )
 def list_threads(request: HttpRequest):
     return BadRequest
+
+
+@api.post(
+    "thread/partial",
+    tags=["Threads"],
+    summary="Init a thread.",
+    description="Init a thread, with the interaction button help.",
+    response={201: None, handled_4xx_codes: Message},
+)
+async def init_thread(request: HttpRequest, init_data: InitThreadSchema):
+    it: InitThread = InitThread.objects.create(
+        thread_id=init_data.thread_id, help_type=init_data.help_type
+    )
+    it.full_clean()
+    it.save()
+    return 201, None
+
+
+@api.delete(
+    "thread/partial/{thread_id}",
+    tags=["Threads"],
+    summary="Delete an init thread.",
+    description="Delete the init for a thread.",
+    response={200: None, handled_4xx_codes: Message},
+)
+async def delete_init_thread(request: HttpRequest, thread_id: int):
+    try:
+        InitThread.objects.get(thread_id=thread_id).delete()
+    except InitThread.DoesNotExist:
+        pass
+    finally:
+        return 200, None
 
 
 @api.get(

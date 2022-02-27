@@ -94,3 +94,8 @@ class ThreadPatchSchema(Schema):
         None,
         description="The id of who closed this thread.",
     )
+
+
+class InitThreadSchema(Schema):
+    thread_id: int = Field(..., description="The ID of the associated thread.")
+    help_type: str = Field(..., description="The type of initial help requested.")
