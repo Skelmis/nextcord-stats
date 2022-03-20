@@ -115,6 +115,7 @@ def create_new_thread(request: HttpRequest, new_thread: ThreadCreateSchema):
 
 @api.get(
     "thread",
+    deprecated=True,
     tags=["Threads"],
     summary="Get all Threads.",
     description="Retrieve all the information for all threads.",
@@ -236,6 +237,7 @@ def create_thread_message(
 
 @api.get(
     "thread/{thread_id}/messages",
+    deprecated=True,
     tags=["Threads"],
     summary="Get Thread messages.",
     description="Retrieve all the messages for this thread.",
@@ -247,6 +249,7 @@ def list_thread_messages(request: HttpRequest, thread_id: int):
 
 @api.get(
     "thread/{thread_id}/messages/{message_id}",
+    deprecated=True,
     tags=["Threads"],
     summary="Get a specific Thread message.",
     description="Retrieve a specific message from a thread.",
